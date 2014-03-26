@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4032DDB418E394D000C55FC8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB318E394D000C55FC8 /* Foundation.framework */; };
+		4032DDB618E394D000C55FC8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB518E394D000C55FC8 /* CoreGraphics.framework */; };
+		4032DDB818E394D000C55FC8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB718E394D000C55FC8 /* UIKit.framework */; };
+		4032DDBE18E394D000C55FC8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4032DDBC18E394D000C55FC8 /* InfoPlist.strings */; };
+		4032DDC018E394D000C55FC8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDBF18E394D000C55FC8 /* main.m */; };
+		4032DDC418E394D000C55FC8 /* LOPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDC318E394D000C55FC8 /* LOPAppDelegate.m */; };
+		4032DDC618E394D000C55FC8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4032DDC518E394D000C55FC8 /* Images.xcassets */; };
+		4032DDCD18E394D000C55FC8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDCC18E394D000C55FC8 /* XCTest.framework */; };
+		4032DDCE18E394D000C55FC8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB318E394D000C55FC8 /* Foundation.framework */; };
+		4032DDCF18E394D000C55FC8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB718E394D000C55FC8 /* UIKit.framework */; };
+		4032DDD718E394D000C55FC8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4032DDD518E394D000C55FC8 /* InfoPlist.strings */; };
+		4032DDD918E394D000C55FC8 /* SelfixTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDD818E394D000C55FC8 /* SelfixTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4032DDD018E394D000C55FC8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4032DDA818E394D000C55FC8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4032DDAF18E394D000C55FC8;
+			remoteInfo = Selfix;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4032DDB018E394D000C55FC8 /* Selfix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Selfix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4032DDB318E394D000C55FC8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4032DDB518E394D000C55FC8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4032DDB718E394D000C55FC8 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4032DDBB18E394D000C55FC8 /* Selfix-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Selfix-Info.plist"; sourceTree = "<group>"; };
+		4032DDBD18E394D000C55FC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4032DDBF18E394D000C55FC8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4032DDC118E394D000C55FC8 /* Selfix-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Selfix-Prefix.pch"; sourceTree = "<group>"; };
+		4032DDC218E394D000C55FC8 /* LOPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LOPAppDelegate.h; sourceTree = "<group>"; };
+		4032DDC318E394D000C55FC8 /* LOPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LOPAppDelegate.m; sourceTree = "<group>"; };
+		4032DDC518E394D000C55FC8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4032DDCB18E394D000C55FC8 /* SelfixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SelfixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4032DDCC18E394D000C55FC8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4032DDD418E394D000C55FC8 /* SelfixTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SelfixTests-Info.plist"; sourceTree = "<group>"; };
+		4032DDD618E394D000C55FC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4032DDD818E394D000C55FC8 /* SelfixTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfixTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4032DDAD18E394D000C55FC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDB618E394D000C55FC8 /* CoreGraphics.framework in Frameworks */,
+				4032DDB818E394D000C55FC8 /* UIKit.framework in Frameworks */,
+				4032DDB418E394D000C55FC8 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4032DDC818E394D000C55FC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDCD18E394D000C55FC8 /* XCTest.framework in Frameworks */,
+				4032DDCF18E394D000C55FC8 /* UIKit.framework in Frameworks */,
+				4032DDCE18E394D000C55FC8 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4032DDA718E394D000C55FC8 = {
+			isa = PBXGroup;
+			children = (
+				4032DDB918E394D000C55FC8 /* Selfix */,
+				4032DDD218E394D000C55FC8 /* SelfixTests */,
+				4032DDB218E394D000C55FC8 /* Frameworks */,
+				4032DDB118E394D000C55FC8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4032DDB118E394D000C55FC8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDB018E394D000C55FC8 /* Selfix.app */,
+				4032DDCB18E394D000C55FC8 /* SelfixTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4032DDB218E394D000C55FC8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDB318E394D000C55FC8 /* Foundation.framework */,
+				4032DDB518E394D000C55FC8 /* CoreGraphics.framework */,
+				4032DDB718E394D000C55FC8 /* UIKit.framework */,
+				4032DDCC18E394D000C55FC8 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4032DDB918E394D000C55FC8 /* Selfix */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDC218E394D000C55FC8 /* LOPAppDelegate.h */,
+				4032DDC318E394D000C55FC8 /* LOPAppDelegate.m */,
+				4032DDC518E394D000C55FC8 /* Images.xcassets */,
+				4032DDBA18E394D000C55FC8 /* Supporting Files */,
+			);
+			path = Selfix;
+			sourceTree = "<group>";
+		};
+		4032DDBA18E394D000C55FC8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDBB18E394D000C55FC8 /* Selfix-Info.plist */,
+				4032DDBC18E394D000C55FC8 /* InfoPlist.strings */,
+				4032DDBF18E394D000C55FC8 /* main.m */,
+				4032DDC118E394D000C55FC8 /* Selfix-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4032DDD218E394D000C55FC8 /* SelfixTests */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDD818E394D000C55FC8 /* SelfixTests.m */,
+				4032DDD318E394D000C55FC8 /* Supporting Files */,
+			);
+			path = SelfixTests;
+			sourceTree = "<group>";
+		};
+		4032DDD318E394D000C55FC8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDD418E394D000C55FC8 /* SelfixTests-Info.plist */,
+				4032DDD518E394D000C55FC8 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4032DDAF18E394D000C55FC8 /* Selfix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4032DDDC18E394D000C55FC8 /* Build configuration list for PBXNativeTarget "Selfix" */;
+			buildPhases = (
+				4032DDAC18E394D000C55FC8 /* Sources */,
+				4032DDAD18E394D000C55FC8 /* Frameworks */,
+				4032DDAE18E394D000C55FC8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Selfix;
+			productName = Selfix;
+			productReference = 4032DDB018E394D000C55FC8 /* Selfix.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4032DDCA18E394D000C55FC8 /* SelfixTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4032DDDF18E394D000C55FC8 /* Build configuration list for PBXNativeTarget "SelfixTests" */;
+			buildPhases = (
+				4032DDC718E394D000C55FC8 /* Sources */,
+				4032DDC818E394D000C55FC8 /* Frameworks */,
+				4032DDC918E394D000C55FC8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4032DDD118E394D000C55FC8 /* PBXTargetDependency */,
+			);
+			name = SelfixTests;
+			productName = SelfixTests;
+			productReference = 4032DDCB18E394D000C55FC8 /* SelfixTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4032DDA818E394D000C55FC8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = LOP;
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Pedro Lopes";
+				TargetAttributes = {
+					4032DDCA18E394D000C55FC8 = {
+						TestTargetID = 4032DDAF18E394D000C55FC8;
+					};
+				};
+			};
+			buildConfigurationList = 4032DDAB18E394D000C55FC8 /* Build configuration list for PBXProject "Selfix" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4032DDA718E394D000C55FC8;
+			productRefGroup = 4032DDB118E394D000C55FC8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4032DDAF18E394D000C55FC8 /* Selfix */,
+				4032DDCA18E394D000C55FC8 /* SelfixTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4032DDAE18E394D000C55FC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDBE18E394D000C55FC8 /* InfoPlist.strings in Resources */,
+				4032DDC618E394D000C55FC8 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4032DDC918E394D000C55FC8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDD718E394D000C55FC8 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4032DDAC18E394D000C55FC8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDC418E394D000C55FC8 /* LOPAppDelegate.m in Sources */,
+				4032DDC018E394D000C55FC8 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4032DDC718E394D000C55FC8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4032DDD918E394D000C55FC8 /* SelfixTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4032DDD118E394D000C55FC8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4032DDAF18E394D000C55FC8 /* Selfix */;
+			targetProxy = 4032DDD018E394D000C55FC8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4032DDBC18E394D000C55FC8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4032DDBD18E394D000C55FC8 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4032DDD518E394D000C55FC8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4032DDD618E394D000C55FC8 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4032DDDA18E394D000C55FC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4032DDDB18E394D000C55FC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4032DDDD18E394D000C55FC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
+				INFOPLIST_FILE = "Selfix/Selfix-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4032DDDE18E394D000C55FC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
+				INFOPLIST_FILE = "Selfix/Selfix-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4032DDE018E394D000C55FC8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Selfix.app/Selfix";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "SelfixTests/SelfixTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		4032DDE118E394D000C55FC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Selfix.app/Selfix";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
+				INFOPLIST_FILE = "SelfixTests/SelfixTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4032DDAB18E394D000C55FC8 /* Build configuration list for PBXProject "Selfix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4032DDDA18E394D000C55FC8 /* Debug */,
+				4032DDDB18E394D000C55FC8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4032DDDC18E394D000C55FC8 /* Build configuration list for PBXNativeTarget "Selfix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4032DDDD18E394D000C55FC8 /* Debug */,
+				4032DDDE18E394D000C55FC8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4032DDDF18E394D000C55FC8 /* Build configuration list for PBXNativeTarget "SelfixTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4032DDE018E394D000C55FC8 /* Debug */,
+				4032DDE118E394D000C55FC8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4032DDA818E394D000C55FC8 /* Project object */;
+}
