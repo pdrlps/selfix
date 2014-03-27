@@ -14,6 +14,16 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    // configure root and photos view controllers
+    LOPPhotosViewController *photosViewController = [[LOPPhotosViewController alloc] init];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:photosViewController];
+    self.window.rootViewController = navigationController;
+    
+    // configure top navigation bar
+    UINavigationBar *navBar = navigationController.navigationBar;
+    navBar.barTintColor = [UIColor colorWithRed:0.43 green:0.44 blue:0.76 alpha:1];
+    navBar.barStyle = UIBarStyleBlackOpaque;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LOPPhotosViewController.h"
 
 @interface LOPAppDelegate : UIResponder <UIApplicationDelegate>
 

@@ -19,6 +19,7 @@
 		4032DDCF18E394D000C55FC8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4032DDB718E394D000C55FC8 /* UIKit.framework */; };
 		4032DDD718E394D000C55FC8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4032DDD518E394D000C55FC8 /* InfoPlist.strings */; };
 		4032DDD918E394D000C55FC8 /* SelfixTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDD818E394D000C55FC8 /* SelfixTests.m */; };
+		4032DDE418E3960E00C55FC8 /* LOPPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDE318E3960E00C55FC8 /* LOPPhotosViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,8 @@
 		4032DDD418E394D000C55FC8 /* SelfixTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SelfixTests-Info.plist"; sourceTree = "<group>"; };
 		4032DDD618E394D000C55FC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4032DDD818E394D000C55FC8 /* SelfixTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelfixTests.m; sourceTree = "<group>"; };
+		4032DDE218E3960E00C55FC8 /* LOPPhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPPhotosViewController.h; sourceTree = "<group>"; };
+		4032DDE318E3960E00C55FC8 /* LOPPhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPPhotosViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,8 +112,9 @@
 			children = (
 				4032DDC218E394D000C55FC8 /* LOPAppDelegate.h */,
 				4032DDC318E394D000C55FC8 /* LOPAppDelegate.m */,
-				4032DDC518E394D000C55FC8 /* Images.xcassets */,
+				4032DDE518E396F300C55FC8 /* View Controllers */,
 				4032DDBA18E394D000C55FC8 /* Supporting Files */,
+				4032DDC518E394D000C55FC8 /* Images.xcassets */,
 			);
 			path = Selfix;
 			sourceTree = "<group>";
@@ -142,6 +146,15 @@
 				4032DDD518E394D000C55FC8 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4032DDE518E396F300C55FC8 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4032DDE218E3960E00C55FC8 /* LOPPhotosViewController.h */,
+				4032DDE318E3960E00C55FC8 /* LOPPhotosViewController.m */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +255,7 @@
 			files = (
 				4032DDC418E394D000C55FC8 /* LOPAppDelegate.m in Sources */,
 				4032DDC018E394D000C55FC8 /* main.m in Sources */,
+				4032DDE418E3960E00C55FC8 /* LOPPhotosViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +375,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
 				INFOPLIST_FILE = "Selfix/Selfix-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -374,6 +389,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Selfix/Selfix-Prefix.pch";
 				INFOPLIST_FILE = "Selfix/Selfix-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
