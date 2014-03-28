@@ -32,7 +32,19 @@
     self.title = @"Selfix";
     
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"photo"];
+    [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
+    
+    self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"user"];
+                        
+                        
+    if(self.accessToken == nil ) {
+        [SimpleAuth authorize:@"instagram" completion:^(NSDictionary *responseObject, NSError *error) {
+            NSString *accessToken = responseObject[@"credentials"][@"token"];
+            [SSKeychain setPassword:accessToken forService:@"instagram" account:@"user"];
+        }];
+    } else {
+        [self refresh];
+    }
 }
 
 # pragma mark - UICollectionViewController
@@ -42,14 +54,35 @@
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 16;
+    return [self.photos count];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"photo" forIndexPath:indexPath];
+    LOPPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"photo" forIndexPath:indexPath];
+    cell.photo = self.photos[indexPath.row];
     cell.backgroundColor = [UIColor lightGrayColor];
     
     return cell;
+}
+
+# pragma mark - Actions
+-(void)refresh {
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/tags/selfie/media/recent?access_token=%@",self.accessToken ];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        NSData *data = [[NSData alloc] initWithContentsOfURL:location];
+        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+        self.photos = [responseDictionary valueForKeyPath:@"data"];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+        });
+    }];
+    
+    [task resume];
+
 }
 
 @end

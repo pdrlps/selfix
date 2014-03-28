@@ -8,10 +8,16 @@
 
 #import "LOPAppDelegate.h"
 
+#import <SimpleAuth/SimpleAuth.h>
+
 @implementation LOPAppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    SimpleAuth.configuration[@"instagram"] = @{
+                                               @"client_id" : @"703e58325e474f099e72dbc5969fdeee",
+                                               SimpleAuthRedirectURIKey : @"selfix://auth/instagram"
+                                               };
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
