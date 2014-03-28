@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <SAMCache/SAMCache.h>
+#import <SSKeychain/SSKeychain.h>
 
 @interface LOPPhotoCell : UICollectionViewCell
 

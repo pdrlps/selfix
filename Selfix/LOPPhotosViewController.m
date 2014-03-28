@@ -35,13 +35,16 @@
     [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
     
     self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"user"];
-                        
-                        
+    
+    
     if(self.accessToken == nil ) {
-        [SimpleAuth authorize:@"instagram" completion:^(NSDictionary *responseObject, NSError *error) {
-            NSString *accessToken = responseObject[@"credentials"][@"token"];
-            [SSKeychain setPassword:accessToken forService:@"instagram" account:@"user"];
+        [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
+            self.accessToken = responseObject[@"credentials"][@"token"];
+            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"user"];
+            [self refresh];
         }];
+        
+        
     } else {
         [self refresh];
     }
@@ -82,7 +85,7 @@
     }];
     
     [task resume];
-
+    
 }
 
 @end

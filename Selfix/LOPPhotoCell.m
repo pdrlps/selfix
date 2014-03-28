@@ -30,8 +30,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView = [[UIImageView alloc] init];
-        [self.contentView addSubview:self.imageView];
         
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(like)];
+        tap.numberOfTapsRequired = 2;
+        
+        [self addGestureRecognizer:tap];
+        
+        [self.contentView addSubview:self.imageView];
     }
     return self;
 }
@@ -43,6 +48,10 @@
 }
 
 # pragma mark - Actions
+
+/*
+ * Downloads photos from Instagram for a given URL
+ */
 -(void)downloadPhotoFromURL:(NSURL *)url {
     NSString *key = [[NSString alloc] initWithFormat:@"%@-thumbnail",self.photo[@"id"]];
     UIImage *photo = [[SAMCache sharedCache] imageForKey:key];
@@ -64,6 +73,38 @@
         
         [task resume];
     }
+}
+
+/**
+ * Like tapped photo on Instagram
+ */
+-(void)like {
+    NSLog(@"Link: %@", self.photo[@"link"]);
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"user"]];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showLikeCompletion];
+        });
+    }];
+    
+    [task resume];
+   
+    
+}
+
+-(void)showLikeCompletion {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💜 Liked!" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    [alert show];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [alert dismissWithClickedButtonIndex:0 animated:YES];
+    });
 }
 
 @end
