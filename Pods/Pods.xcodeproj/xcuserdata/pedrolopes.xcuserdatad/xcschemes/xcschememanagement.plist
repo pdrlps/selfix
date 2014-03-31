@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-SAMCategories.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-SSKeychain.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,32 +42,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>53814DCE4DC1443CBC7D3B5C</key>
+		<key>016F38A6C3A64DC180FAF26E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>762D88B33E8440EAAC5A318F</key>
+		<key>5EBA2932EFBF45DC8FF95630</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>91C4B8706B0045C899E11E36</key>
+		<key>88FF5AA4F6F74C5DAAD4DF14</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E165B11A40B64FEBACF31A78</key>
+		<key>C1DD009BAB2349EBA4C192C5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E6B99B220D1B4367B031BBA1</key>
+		<key>CAC15B2E1DFE42DF8D570918</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F2D324B28D0041D19F89C519</key>
+		<key>D3C4B113A06746778E3846EC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1B79304D2F1446E8956EDF8</key>
 		<dict>
 			<key>primary</key>
 			<true/>

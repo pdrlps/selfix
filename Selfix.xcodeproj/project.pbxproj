@@ -21,6 +21,11 @@
 		4032DDD918E394D000C55FC8 /* SelfixTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDD818E394D000C55FC8 /* SelfixTests.m */; };
 		4032DDE418E3960E00C55FC8 /* LOPPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4032DDE318E3960E00C55FC8 /* LOPPhotosViewController.m */; };
 		40CEAED018E4ED3D00B4994E /* LOPPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40CEAECF18E4ED3D00B4994E /* LOPPhotoCell.m */; };
+		40E3562D18E5D3A900E1850B /* LOPPhotoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3562C18E5D3A900E1850B /* LOPPhotoController.m */; };
+		40E3563118E5DF5A00E1850B /* LOPDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3563018E5DF5A00E1850B /* LOPDetailViewController.m */; };
+		40E3563418E5E81900E1850B /* LOPPresentDetailTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3563318E5E81900E1850B /* LOPPresentDetailTransition.m */; };
+		40E3563718E5ED0000E1850B /* LOPDismissDetailTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3563618E5ED0000E1850B /* LOPDismissDetailTransition.m */; };
+		40E3563A18E97E8C00E1850B /* LOPMetadataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E3563918E97E8C00E1850B /* LOPMetadataView.m */; };
 		487C2B34E31D40758FC8A749 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E83F4C34569485CBFB3A3A2 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +61,16 @@
 		40CEAECE18E4ED3D00B4994E /* LOPPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPPhotoCell.h; sourceTree = "<group>"; };
 		40CEAECF18E4ED3D00B4994E /* LOPPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPPhotoCell.m; sourceTree = "<group>"; };
 		40CEAED118E4F50700B4994E /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		40E3562B18E5D3A900E1850B /* LOPPhotoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPPhotoController.h; sourceTree = "<group>"; };
+		40E3562C18E5D3A900E1850B /* LOPPhotoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPPhotoController.m; sourceTree = "<group>"; };
+		40E3562F18E5DF5A00E1850B /* LOPDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPDetailViewController.h; sourceTree = "<group>"; };
+		40E3563018E5DF5A00E1850B /* LOPDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPDetailViewController.m; sourceTree = "<group>"; };
+		40E3563218E5E81900E1850B /* LOPPresentDetailTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPPresentDetailTransition.h; sourceTree = "<group>"; };
+		40E3563318E5E81900E1850B /* LOPPresentDetailTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPPresentDetailTransition.m; sourceTree = "<group>"; };
+		40E3563518E5ED0000E1850B /* LOPDismissDetailTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPDismissDetailTransition.h; sourceTree = "<group>"; };
+		40E3563618E5ED0000E1850B /* LOPDismissDetailTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPDismissDetailTransition.m; sourceTree = "<group>"; };
+		40E3563818E97E8C00E1850B /* LOPMetadataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOPMetadataView.h; sourceTree = "<group>"; };
+		40E3563918E97E8C00E1850B /* LOPMetadataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOPMetadataView.m; sourceTree = "<group>"; };
 		5E83F4C34569485CBFB3A3A2 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7452925E0E0E4FF7A6BFDBC6 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +138,7 @@
 			children = (
 				4032DDC218E394D000C55FC8 /* LOPAppDelegate.h */,
 				4032DDC318E394D000C55FC8 /* LOPAppDelegate.m */,
+				40E3562E18E5D4AD00E1850B /* Helpers */,
 				40CEAECD18E4ED1400B4994E /* Views */,
 				4032DDE518E396F300C55FC8 /* View Controllers */,
 				4032DDBA18E394D000C55FC8 /* Supporting Files */,
@@ -165,6 +181,8 @@
 			children = (
 				4032DDE218E3960E00C55FC8 /* LOPPhotosViewController.h */,
 				4032DDE318E3960E00C55FC8 /* LOPPhotosViewController.m */,
+				40E3562F18E5DF5A00E1850B /* LOPDetailViewController.h */,
+				40E3563018E5DF5A00E1850B /* LOPDetailViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -174,8 +192,23 @@
 			children = (
 				40CEAECE18E4ED3D00B4994E /* LOPPhotoCell.h */,
 				40CEAECF18E4ED3D00B4994E /* LOPPhotoCell.m */,
+				40E3563818E97E8C00E1850B /* LOPMetadataView.h */,
+				40E3563918E97E8C00E1850B /* LOPMetadataView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		40E3562E18E5D4AD00E1850B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				40E3562B18E5D3A900E1850B /* LOPPhotoController.h */,
+				40E3562C18E5D3A900E1850B /* LOPPhotoController.m */,
+				40E3563218E5E81900E1850B /* LOPPresentDetailTransition.h */,
+				40E3563318E5E81900E1850B /* LOPPresentDetailTransition.m */,
+				40E3563518E5ED0000E1850B /* LOPDismissDetailTransition.h */,
+				40E3563618E5ED0000E1850B /* LOPDismissDetailTransition.m */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,8 +344,13 @@
 			files = (
 				4032DDC418E394D000C55FC8 /* LOPAppDelegate.m in Sources */,
 				4032DDC018E394D000C55FC8 /* main.m in Sources */,
+				40E3563A18E97E8C00E1850B /* LOPMetadataView.m in Sources */,
+				40E3562D18E5D3A900E1850B /* LOPPhotoController.m in Sources */,
 				40CEAED018E4ED3D00B4994E /* LOPPhotoCell.m in Sources */,
+				40E3563718E5ED0000E1850B /* LOPDismissDetailTransition.m in Sources */,
 				4032DDE418E3960E00C55FC8 /* LOPPhotosViewController.m in Sources */,
+				40E3563418E5E81900E1850B /* LOPPresentDetailTransition.m in Sources */,
+				40E3563118E5DF5A00E1850B /* LOPDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,13 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "LOPPhotoCell.h"
+#import "LOPDetailViewController.h"
+#import "LOPPresentDetailTransition.h"
+#import "LOPDismissDetailTransition.h"
 #import <SimpleAuth/SimpleAuth.h>
 #import <SSKeychain/SSKeychain.h>
 #import <SSKeychain/SSKeychainQuery.h>
 
-@interface LOPPhotosViewController : UICollectionViewController
+@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate>
 
 @property (nonatomic) NSString *accessToken;
-@property (nonatomic) NSArray *photos;
+@property (nonatomic) NSMutableArray *photos;
+@property (nonatomic) UIRefreshControl *refreshControl;
+@property (nonatomic) BOOL loading;
 
 @end

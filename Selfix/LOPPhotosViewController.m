@@ -11,6 +11,13 @@
 
 @implementation LOPPhotosViewController
 
+# pragma mark - Accessors
+- (void)setLoading:(BOOL)loading {
+	_loading = loading;
+    
+	self.navigationItem.rightBarButtonItem.enabled = !_loading;
+}
+
 # pragma mark - UIViewController
 
 -(instancetype)init {
@@ -21,6 +28,7 @@
     layout.minimumInteritemSpacing = 1.0;
     layout.minimumLineSpacing = 1.0;
     
+    self.loading = NO;
     
     return (self = [super initWithCollectionViewLayout:layout]);
 }
@@ -30,13 +38,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"Selfix";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh)];
     
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
     
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor grayColor];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
+    self.collectionView.alwaysBounceVertical = YES;
+    
     self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"user"];
-    
-    
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
             self.accessToken = responseObject[@"credentials"][@"token"];
@@ -44,10 +58,11 @@
             [self refresh];
         }];
         
-        
     } else {
         [self refresh];
     }
+    
+   
 }
 
 # pragma mark - UICollectionViewController
@@ -68,8 +83,35 @@
     return cell;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *photo = self.photos[indexPath.row];
+    
+    LOPDetailViewController *detailView = [[LOPDetailViewController alloc] init];
+    detailView.modalPresentationStyle = UIModalPresentationCustom;
+    detailView.transitioningDelegate = self;
+    detailView.photo = photo;
+    
+    [self presentViewController:detailView animated:YES completion:nil];
+}
+
+# pragma mark - UIViewControllerTransitioningDelegate
+-(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source {
+    return [[LOPPresentDetailTransition alloc] init];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    return [[LOPDismissDetailTransition alloc] init];
+}
+
 # pragma mark - Actions
 -(void)refresh {
+    if (self.loading) {
+		return;
+	}
+    
+	self.loading = YES;
+    
+
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/tags/selfie/media/recent?access_token=%@",self.accessToken ];
     NSURL *url = [[NSURL alloc] initWithString:urlString];
@@ -81,11 +123,12 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView reloadData];
+            [self.refreshControl endRefreshing];
+            self.loading = NO;
         });
     }];
     
     [task resume];
-    
 }
 
 @end

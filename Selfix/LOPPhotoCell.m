@@ -14,13 +14,13 @@
 
 # pragma mark - Accessors
 -(void)setPhoto:(NSDictionary *)photo {
-    if(!_photo) {
+  
         _photo = photo;
         
-        NSURL *url = [[NSURL alloc] initWithString:_photo[@"images"][@"thumbnail"][@"url"]];
-        
-        [self downloadPhotoFromURL:url];
-    }
+        [LOPPhotoController imageForPhoto:_photo size:@"thumbnail" completion:^(UIImage *image) {
+            self.imageView.image = image;
+        }];
+    
 }
 
 # pragma mark - UIView
@@ -49,32 +49,6 @@
 
 # pragma mark - Actions
 
-/*
- * Downloads photos from Instagram for a given URL
- */
--(void)downloadPhotoFromURL:(NSURL *)url {
-    NSString *key = [[NSString alloc] initWithFormat:@"%@-thumbnail",self.photo[@"id"]];
-    UIImage *photo = [[SAMCache sharedCache] imageForKey:key];
-    if (photo) {
-        self.imageView.image = photo;
-        return;
-    } else {
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-        NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-            NSData *data = [[NSData alloc] initWithContentsOfURL:location];
-            UIImage *image = [[UIImage alloc] initWithData:data];
-            
-            [[SAMCache sharedCache] setImage:image forKey:key];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.imageView.image = image;
-            });
-        }];
-        
-        [task resume];
-    }
-}
-
 /**
  * Like tapped photo on Instagram
  */
@@ -93,9 +67,7 @@
         });
     }];
     
-    [task resume];
-   
-    
+    [task resume];    
 }
 
 -(void)showLikeCompletion {
