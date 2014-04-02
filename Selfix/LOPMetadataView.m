@@ -154,7 +154,12 @@
         _avatarImageView.layer.borderWidth = 1.0f;
         _avatarImageView.layer.masksToBounds = YES;
         _avatarImageView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0f];
-        _avatarImageView.userInteractionEnabled = NO;
+        _avatarImageView.userInteractionEnabled = YES;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUser:)];
+        tap.numberOfTapsRequired = 1;
+        [_avatarImageView addGestureRecognizer:tap];
+
     }
     return _avatarImageView;
 }
@@ -164,7 +169,6 @@
     if (!_usernameButton) {
         _usernameButton = [[UIButton alloc] initWithFrame:CGRectMake(47.0f, 0.0f, 200.0f, 32.0f)];
         _usernameButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
-        //_usernameButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
         _usernameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         
         UIColor *textColor = [[self class] lightTextColor];
@@ -178,10 +182,10 @@
 
 - (UIButton *)shareButton {
     if (!_shareButton) {
-        _shareButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 32.0f)];
+        _shareButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 64.0f, 64.0f)];
         [_shareButton setImage:[UIImage imageNamed:@"share"] forState:UIControlStateNormal];
         _shareButton.adjustsImageWhenHighlighted = NO;
-        _shareButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+        _shareButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 24.0f, 6.0f);
         _shareButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         
         [_shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
@@ -192,11 +196,12 @@
 
 - (UIButton *)likesButton {
     if (!_likesButton) {
-        _likesButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 360.0f, 50.0f, 40.0f)];
+        _likesButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 350.0f, 64.0f, 64.0f)];
         _likesButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
         [_likesButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
         _likesButton.adjustsImageWhenHighlighted = NO;
-        _likesButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+        _likesButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _likesButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
         
         UIColor *textColor = [[self class] lightTextColor];
         [_likesButton setTitleColor:textColor forState:UIControlStateNormal];
@@ -209,11 +214,11 @@
 
 - (UIButton *)commentsButton {
     if (!_commentsButton) {
-        _commentsButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 360.0f, 50.0f, 40.0f)];
+        _commentsButton = [[UIButton alloc] initWithFrame:CGRectMake(240.0f, 350.0f, 64.0f, 64.0f)];
         _commentsButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
         [_commentsButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
         _commentsButton.adjustsImageWhenHighlighted = NO;
-        _commentsButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+        _commentsButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
         _commentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         
         UIColor *textColor = [[self class] lightTextColor];

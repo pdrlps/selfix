@@ -15,7 +15,7 @@
 #import <SSKeychain/SSKeychain.h>
 #import <SSKeychain/SSKeychainQuery.h>
 
-@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, UIImagePickerControllerDelegate>
+@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic) NSString *accessToken;
 @property (nonatomic) NSMutableArray *photos;
