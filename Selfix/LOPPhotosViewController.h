@@ -15,11 +15,13 @@
 #import <SSKeychain/SSKeychain.h>
 #import <SSKeychain/SSKeychainQuery.h>
 
-@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate>
+@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic) NSString *accessToken;
 @property (nonatomic) NSMutableArray *photos;
 @property (nonatomic) UIRefreshControl *refreshControl;
 @property (nonatomic) BOOL loading;
+
+-(BOOL)connected;
 
 @end

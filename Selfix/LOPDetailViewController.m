@@ -18,16 +18,18 @@
 
 # pragma mark - UIViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     // customize view
-    self.view.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.8];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.8];
     self.view.clipsToBounds = YES;
     
     // customize metadata
     self.metadataView = [[LOPMetadataView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0f, 400.0f)];
     self.metadataView.alpha = 0.0;
+    self.metadataView.controller = self;
     self.metadataView.photo = self.photo;
     [self.view addSubview:self.metadataView];
     
@@ -38,16 +40,26 @@
     }];
     [self.view addSubview:self.imageView];
     
-    // dismiss gestures (tap + swipe)
+    // dismiss gestures (tap + swipes)
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
     [self.view addGestureRecognizer:tap];
     
-    UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
-    swipe.direction = UISwipeGestureRecognizerDirectionDown;
-    [self.view addGestureRecognizer:swipe];
+    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+    swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:swipeDown];
+    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+    swipeUp.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeUp];
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeLeft];
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swipeRight];
     
     // customize animations
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {

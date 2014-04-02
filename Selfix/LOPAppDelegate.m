@@ -9,14 +9,19 @@
 #import "LOPAppDelegate.h"
 
 #import <SimpleAuth/SimpleAuth.h>
+#import <Crashlytics/Crashlytics.h>
 
 @implementation LOPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     SimpleAuth.configuration[@"instagram"] = @{
                                                @"client_id" : @"703e58325e474f099e72dbc5969fdeee",
                                                SimpleAuthRedirectURIKey : @"selfix://auth/instagram"
                                                };
+    
+    [Crashlytics startWithAPIKey:@"23fc3a72601974bf2932492e8609d82c6ca052fc"];
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -28,7 +33,7 @@
     
     // configure top navigation bar
     UINavigationBar *navBar = navigationController.navigationBar;
-    navBar.barTintColor = [UIColor colorWithRed:0.43 green:0.44 blue:0.76 alpha:1];
+    navBar.barTintColor = [UIColor colorWithRed:0.24 green:0.72 blue:0.69 alpha:1];
     navBar.barStyle = UIBarStyleBlackOpaque;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

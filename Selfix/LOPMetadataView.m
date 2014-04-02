@@ -12,7 +12,7 @@
 
 @property (nonatomic) UIImageView *avatarImageView;
 @property (nonatomic) UIButton *usernameButton;
-@property (nonatomic) UIButton *timeButton;
+@property (nonatomic) UIButton *shareButton;
 @property (nonatomic) UIButton *likesButton;
 @property (nonatomic) UIButton *commentsButton;
 
@@ -25,134 +25,216 @@
 - (void)setPhoto:(NSDictionary *)photo {
 	_photo = photo;
     
-	NSDate *createdAt = [NSDate dateWithTimeIntervalSince1970:[_photo[@"created_time"] doubleValue]];
-   // [self.timeButton setTitle:[createdAt sam_briefTimeInWords] forState:UIControlStateNormal];
+    // TODO: Set the avatar, username, share, number of likes, and number of comments
     
-    // TODO: Set the avatar, username, time, number of likes, and number of comments
+    // likes
+    NSString *likes = [[NSString alloc] initWithFormat:@"%@",[self.photo valueForKeyPath:@"likes.count"]];
+    [self.likesButton setTitle:likes forState:UIControlStateNormal];
+    
+    //username
+    [self.usernameButton setTitle:[self.photo valueForKeyPath:@"user.username"] forState:UIControlStateNormal];
+    
+    // comments
+    NSArray *data = [self.photo valueForKeyPath:@"comments.data"];
+    NSString *comments = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)data.count];
+    [self.commentsButton setTitle:comments forState:UIControlStateNormal];
+    
+    // avatar
+    UIImage *image = [[SAMCache sharedCache] imageForKey:[self.photo valueForKeyPath:@"user.username"]];
+    if (image) {
+        self.avatarImageView.image = image;
+    } else {
+        NSURL *url = [[NSURL alloc] initWithString:[self.photo valueForKeyPath:@"user.profile_picture"]];
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            NSData *data = [[NSData alloc] initWithContentsOfURL:location];
+            UIImage *image = [[UIImage alloc] initWithData:data];
+            
+            [[SAMCache sharedCache] setImage:image forKey:[self.photo valueForKeyPath:@"user.username"]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.avatarImageView.image = image;
+            });
+        }];
+        
+        [task resume];
+    }
 }
 
 #pragma mark - Actions
 
-- (void)openUser:(id)sender {    
-     NSString *urlString = [[NSString alloc] initWithFormat:@"http://instagram.com/%@",[self.photo valueForKeyPath:@"user.username"]];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+- (void)openUser:(id)sender {
+    NSURL *instagramUrl = [[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"instagram://user?username=%@",[self.photo valueForKeyPath:@"user.username"]]];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramUrl]) {
+        [[UIApplication sharedApplication] openURL:instagramUrl];
+    } else {
+        [[UIApplication sharedApplication] openURL:[[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"http://instagram.com/%@",[self.photo valueForKeyPath:@"user.username"]]]];
+    }
 }
 
 
 - (void)openPhoto:(id)sender {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.photo[@"link"]]];
+    NSURL *instagramUrl = [[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"instagram://media?id=%@",[self.photo valueForKeyPath:@"id"]]];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramUrl]) {
+        [[UIApplication sharedApplication] openURL:instagramUrl];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.photo[@"link"]]];
+    }
+}
+
+-(void)share:(id)sender {
+    NSMutableArray *sharingItems = [NSMutableArray new];
+    NSString *shareText = [[NSString alloc] initWithFormat:@"%@ #selfix #selfie",self.photo[@"link"] ];
+    [sharingItems addObject:shareText];
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
+    [self.controller presentViewController:activityController animated:YES completion:nil];
+}
+
+
+/**
+ * Like tapped photo on Instagram
+ */
+-(void)like:(id)sender {
+    NSLog(@"Link: %@", self.photo[@"link"]);
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"user"]];
+    NSURL *url = [[NSURL alloc] initWithString:urlString];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showLikeCompletion];
+        });
+    }];
+    
+    [task resume];
+}
+
+-(void)showLikeCompletion {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Liked!" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+    [alert show];
+    int likes = [self.likesButton.titleLabel.text integerValue];
+    likes += 1;
+    NSString *likeText = [[NSString alloc] initWithFormat:@"%d",likes];
+    [self.likesButton setTitle:likeText forState:UIControlStateNormal];
+    
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [alert dismissWithClickedButtonIndex:0 animated:YES];
+    });
 }
 
 #pragma mark - UIView
 
 - (instancetype)initWithFrame:(CGRect)frame {
-	if ((self = [super initWithFrame:frame])) {
-		[self addSubview:self.usernameButton];
-		[self addSubview:self.avatarImageView];
-		[self addSubview:self.timeButton];
-		[self addSubview:self.likesButton];
-		[self addSubview:self.commentsButton];
-	}
-	return self;
+    if ((self = [super initWithFrame:frame])) {
+        [self addSubview:self.usernameButton];
+        [self addSubview:self.avatarImageView];
+        [self addSubview:self.shareButton];
+        [self addSubview:self.likesButton];
+        [self addSubview:self.commentsButton];
+    }
+    return self;
 }
 
 
 - (CGSize)sizeThatFits:(CGSize)size {
-	return CGSizeMake(320.0f, 400.0f);
+    return CGSizeMake(320.0f, 400.0f);
 }
 
 #pragma mark - UIControls
 
 - (UIImageView *)avatarImageView {
-	if (!_avatarImageView) {
-		_avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 0.0f, 32.0f, 32.0f)];
-		_avatarImageView.layer.cornerRadius = 16.0f;
-		_avatarImageView.layer.borderColor = [[self class] darkTextColor].CGColor;
-		_avatarImageView.layer.borderWidth = 1.0f;
-		_avatarImageView.layer.masksToBounds = YES;
-		_avatarImageView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0f];
-		_avatarImageView.userInteractionEnabled = NO;
-	}
-	return _avatarImageView;
+    if (!_avatarImageView) {
+        _avatarImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 0.0f, 32.0f, 32.0f)];
+        _avatarImageView.layer.cornerRadius = 16.0f;
+        _avatarImageView.layer.borderColor = [[self class] darkTextColor].CGColor;
+        _avatarImageView.layer.borderWidth = 1.0f;
+        _avatarImageView.layer.masksToBounds = YES;
+        _avatarImageView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0f];
+        _avatarImageView.userInteractionEnabled = NO;
+    }
+    return _avatarImageView;
 }
 
 
 - (UIButton *)usernameButton {
-	if (!_usernameButton) {
-		_usernameButton = [[UIButton alloc] initWithFrame:CGRectMake(47.0f, 0.0f, 200.0f, 32.0f)];
-		_usernameButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-		_usernameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    if (!_usernameButton) {
+        _usernameButton = [[UIButton alloc] initWithFrame:CGRectMake(47.0f, 0.0f, 200.0f, 32.0f)];
+        _usernameButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+        //_usernameButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        _usernameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         
-		UIColor *textColor = [[self class] darkTextColor];
-		[_usernameButton setTitleColor:textColor forState:UIControlStateNormal];
-		[_usernameButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
-		[_usernameButton addTarget:self action:@selector(openUser:) forControlEvents:UIControlEventTouchUpInside];
-	}
-	return _usernameButton;
+        UIColor *textColor = [[self class] lightTextColor];
+        [_usernameButton setTitleColor:textColor forState:UIControlStateNormal];
+        [_usernameButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
+        [_usernameButton addTarget:self action:@selector(openUser:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _usernameButton;
 }
 
 
-- (UIButton *)timeButton {
-	if (!_timeButton) {
-		_timeButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 32.0f)];
-		_timeButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-		[_timeButton setImage:[UIImage imageNamed:@"time"] forState:UIControlStateNormal];
-		_timeButton.adjustsImageWhenHighlighted = NO;
-		_timeButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
-		_timeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+- (UIButton *)shareButton {
+    if (!_shareButton) {
+        _shareButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 0.0f, 50.0f, 32.0f)];
+        [_shareButton setImage:[UIImage imageNamed:@"share"] forState:UIControlStateNormal];
+        _shareButton.adjustsImageWhenHighlighted = NO;
+        _shareButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+        _shareButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         
-		UIColor *textColor = [[self class] lightTextColor];
-		[_timeButton setTitleColor:textColor forState:UIControlStateNormal];
-		[_timeButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
-		[_timeButton addTarget:self action:@selector(openPhoto:) forControlEvents:UIControlEventTouchUpInside];
-	}
-	return _timeButton;
+        [_shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _shareButton;
 }
 
 
 - (UIButton *)likesButton {
-	if (!_likesButton) {
-		_likesButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 360.0f, 50.0f, 40.0f)];
-		_likesButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-		[_likesButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
-		_likesButton.adjustsImageWhenHighlighted = NO;
-		_likesButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+    if (!_likesButton) {
+        _likesButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 360.0f, 50.0f, 40.0f)];
+        _likesButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+        [_likesButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
+        _likesButton.adjustsImageWhenHighlighted = NO;
+        _likesButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
         
-		UIColor *textColor = [[self class] lightTextColor];
-		[_likesButton setTitleColor:textColor forState:UIControlStateNormal];
-		[_likesButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
-		[_likesButton addTarget:self action:@selector(openPhoto:) forControlEvents:UIControlEventTouchUpInside];
-	}
-	return _likesButton;
+        UIColor *textColor = [[self class] lightTextColor];
+        [_likesButton setTitleColor:textColor forState:UIControlStateNormal];
+        [_likesButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
+        [_likesButton addTarget:self action:@selector(like:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _likesButton;
 }
 
 
 - (UIButton *)commentsButton {
-	if (!_commentsButton) {
-		_commentsButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 360.0f, 50.0f, 40.0f)];
-		_commentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-		[_commentsButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
-		_commentsButton.adjustsImageWhenHighlighted = NO;
-		_commentsButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
-		_commentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    if (!_commentsButton) {
+        _commentsButton = [[UIButton alloc] initWithFrame:CGRectMake(260.0f, 360.0f, 50.0f, 40.0f)];
+        _commentsButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f];
+        [_commentsButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
+        _commentsButton.adjustsImageWhenHighlighted = NO;
+        _commentsButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 6.0f);
+        _commentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         
-		UIColor *textColor = [[self class] lightTextColor];
-		[_commentsButton setTitleColor:textColor forState:UIControlStateNormal];
-		[_commentsButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
-		[_commentsButton addTarget:self action:@selector(openPhoto:) forControlEvents:UIControlEventTouchUpInside];
-	}
-	return _commentsButton;
+        UIColor *textColor = [[self class] lightTextColor];
+        [_commentsButton setTitleColor:textColor forState:UIControlStateNormal];
+        [_commentsButton setTitleColor:[textColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
+        [_commentsButton addTarget:self action:@selector(openPhoto:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _commentsButton;
 }
 
 #pragma mark - Private
 
 + (UIColor *)darkTextColor {
-	return [UIColor colorWithRed:0.949f green:0.510f blue:0.380f alpha:1.0f];
+    return [UIColor colorWithRed:0.24 green:0.72 blue:0.69 alpha:1];
 }
 
 
 + (UIColor *)lightTextColor {
-	return [UIColor colorWithRed:0.973f green:0.753f blue:0.686f alpha:1.0f];
+    return [UIColor colorWithRed:0.49 green:0.78 blue:0.69 alpha:1];
 }
+
+
 
 @end

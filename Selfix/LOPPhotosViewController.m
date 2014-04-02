@@ -7,6 +7,8 @@
 //
 
 #import "LOPPhotosViewController.h"
+#import "LOPReachability.h"
+#import <SystemConfiguration/SystemConfiguration.h>
 
 
 @implementation LOPPhotosViewController
@@ -14,8 +16,6 @@
 # pragma mark - Accessors
 - (void)setLoading:(BOOL)loading {
 	_loading = loading;
-    
-	self.navigationItem.rightBarButtonItem.enabled = !_loading;
 }
 
 # pragma mark - UIViewController
@@ -36,16 +36,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.title = @"Selfix";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh)];
     
+    // right navigation goes to Instagram camera or shows camera
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera"] style:UIBarButtonItemStylePlain target:self action:@selector(showCamera)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+    
+    // left navigation signs out / changes user
+    NSShadow* shadow = [NSShadow new];
+    shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
+    shadow.shadowColor = [UIColor clearColor];
+    [[UINavigationBar appearance] setTitleTextAttributes: @{
+                                                            NSForegroundColorAttributeName: [UIColor whiteColor],
+                                                            NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:24.0f],
+                                                            NSShadowAttributeName: shadow
+                                                            }];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
     
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor grayColor];
+    self.refreshControl.tintColor = [UIColor colorWithRed:0.49 green:0.78 blue:0.69 alpha:1];
     [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
@@ -62,7 +73,7 @@
         [self refresh];
     }
     
-   
+    
 }
 
 # pragma mark - UICollectionViewController
@@ -103,32 +114,83 @@
     return [[LOPDismissDetailTransition alloc] init];
 }
 
+# pragma mark - UIImagePickerController
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    NSMutableArray *sharingItems = [NSMutableArray new];
+    UIImage *shareImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    [sharingItems addObject:shareImage];
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
+    [self presentViewController:activityController animated:YES completion:nil];
+}
+
 # pragma mark - Actions
 -(void)refresh {
-    if (self.loading) {
-		return;
-	}
-    
-	self.loading = YES;
-    
-
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/tags/selfie/media/recent?access_token=%@",self.accessToken ];
-    NSURL *url = [[NSURL alloc] initWithString:urlString];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-        NSData *data = [[NSData alloc] initWithContentsOfURL:location];
-        NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        self.photos = [responseDictionary valueForKeyPath:@"data"];
+    if([self connected]){
+        if (self.loading) {
+            return;
+        }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-            [self.refreshControl endRefreshing];
-            self.loading = NO;
-        });
-    }];
-    
-    [task resume];
+        self.loading = YES;
+        
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/tags/selfie/media/recent?access_token=%@",self.accessToken ];
+        NSURL *url = [[NSURL alloc] initWithString:urlString];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+            NSData *data = [[NSData alloc] initWithContentsOfURL:location];
+            NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+            self.photos = [responseDictionary valueForKeyPath:@"data"];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+                [self.refreshControl endRefreshing];
+                self.loading = NO;
+            });
+        }];
+        
+        [task resume];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Internet!" message:@"Check your Internet connection! You need an Internet connection to use Selfix!" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+        [alert show];
+
+    }
 }
+
+/*
+ *  Redirects to Instagram or shows system Camera
+ */
+-(void)showCamera {
+    NSURL *instagramURL = [NSURL URLWithString:@"instagram://camera"];
+    if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
+        [[UIApplication sharedApplication] openURL:instagramURL];
+    } else {
+        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    }
+}
+
+/*
+ *  User sign out (remove from keychain)
+ */
+-(void)signOut {
+    [SSKeychain deletePasswordForService:@"instagram" account:@"user"];
+    self.accessToken = nil;
+    [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
+        self.accessToken = responseObject[@"credentials"][@"token"];
+        [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"user"];
+        [self refresh];
+    }];
+}
+
+-(BOOL)connected {
+    LOPReachability *reachability = [LOPReachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
+    return networkStatus != NotReachable;
+}
+
 
 @end

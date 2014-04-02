@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LOPPhotoController.h"
 #import "LOPMetadataView.h"
+#import <SSKeychain/SSKeychain.h>
 
 @interface LOPDetailViewController : UIViewController
 

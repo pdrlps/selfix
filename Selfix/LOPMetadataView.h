@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "LOPPhotoController.h"
 #import <SAMCategories/NSDate+SAMAdditions.h>
+#import <SSKeychain/SSKeychain.h>
+#import <SAMCache/SAMCache.h>
 
 @interface LOPMetadataView : UIView
 
 @property (nonatomic) NSDictionary *photo;
+@property (nonatomic) UIViewController *controller;
 
 @end
