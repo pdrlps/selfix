@@ -271,6 +271,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Pedro Lopes";
 				TargetAttributes = {
+					4032DDAF18E394D000C55FC8 = {
+						DevelopmentTeam = 98WHGTLA84;
+					};
 					4032DDCA18E394D000C55FC8 = {
 						TestTargetID = 4032DDAF18E394D000C55FC8;
 					};
@@ -492,6 +495,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -511,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
