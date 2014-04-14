@@ -1,4 +1,4 @@
 # Selfix
 
-Selfies photo browser for Instagram.
+[Selfies Instagram browser for iPhone](http://pedrolopes.net/selfix).
 

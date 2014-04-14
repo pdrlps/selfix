@@ -21,13 +21,13 @@
 # pragma mark - UIViewController
 
 -(instancetype)init {
-    // start layout and set properties
+    // init layout and set properties
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    
     layout.itemSize = CGSizeMake(106.0f, 106.0f);
     layout.minimumInteritemSpacing = 1.0;
     layout.minimumLineSpacing = 1.0;
     
+    // init boolean var for loading status
     self.loading = NO;
     
     return (self = [super initWithCollectionViewLayout:layout]);
@@ -37,7 +37,21 @@
 {
     [super viewDidLoad];
     self.title = @"Selfix";
+    
+    // start OpenGL
     [AFOpenGLManager beginOpenGLLoad];
+    
+    // set refresh on pull down handling
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor colorWithRed:0.49 green:0.78 blue:0.69 alpha:1];
+    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
+    self.collectionView.alwaysBounceVertical = YES;
+    
+    // register DidBecomeActive (reload content)
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    // setup navigation bar styling
     NSShadow* shadow = [NSShadow new];
     shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
     shadow.shadowColor = [UIColor clearColor];
@@ -48,29 +62,21 @@
                                                             }];
     
     
-    // right navigation goes to Instagram camera or shows camera
+    // right navigation shows camera
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera"] style:UIBarButtonItemStylePlain target:self action:@selector(showCamera)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-    // register DidBecomeActive (reload content)
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    // left navigation signs out / changes user
+    // init collection view
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
     
-    // refresh on pull down
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor colorWithRed:0.49 green:0.78 blue:0.69 alpha:1];
-    [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-    [self.collectionView addSubview:self.refreshControl];
-    self.collectionView.alwaysBounceVertical = YES;
-    
-    // load authentication
+    // load authentication, if available
     self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"selfix"];
     
     if(self.accessToken == nil ) {
+        // no previous account, authorize
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
+            // authentication error, inform user
             if (error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong with your credentials! Please try again!" delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
@@ -79,6 +85,7 @@
                 [self showSignInButton];
                 return;
             } else {
+                // all ok, store token and load Instagram content
                 self.accessToken = responseObject[@"credentials"][@"token"];
                 [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
                 [self showSignOutButton];
@@ -87,6 +94,7 @@
         }];
         
     } else {
+        // account already available, load Instagram content
         [self showSignOutButton];
         [self refresh];
     }
@@ -95,7 +103,6 @@
 }
 
 # pragma mark - UICollectionViewController
-
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
@@ -133,20 +140,19 @@
 }
 
 # pragma mark - UIImagePickerController
-
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    NSMutableArray *sharingItems = [NSMutableArray new];
+    // load image from picker
     UIImage *shareImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    [sharingItems addObject:shareImage];
     
+    // dismiss picker
     [picker dismissViewControllerAnimated:YES completion:^{
-        // kAviaryAPIKey and kAviarySecret are developer defined
-        // and contain your API key and secret respectively
+        // configure Aviary photo editor
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             [AFPhotoEditorController setAPIKey:@"a7a5b445faad3229" secret:@"643b367ec662ff1a"];
         });
         
+        // launch Aviary photo editor
         AFPhotoEditorController *editorController = [[AFPhotoEditorController alloc] initWithImage:shareImage];
         [editorController setDelegate:self];
         [self presentViewController:editorController animated:YES completion:nil];
@@ -156,15 +162,15 @@
 # pragma mark - AFPhotoEditorControllerDelegate
 - (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image
 {
+    // finished editing, dismiss and share to Instagram or default
     [editor dismissViewControllerAnimated:YES completion:^{
-        if ([MGInstagram isAppInstalled])
-        {
+        if ([MGInstagram isAppInstalled]) {
             [MGInstagram postImage:image inView:self.view];
         }
         else
         {
             NSMutableArray *sharingItems = [NSMutableArray new];
-            NSString *shareText = @"#selfix #selfie http://pedrolopes.net/selfix";
+            NSString *shareText = @"via #selfix #selfie http://pedrolopes.net/selfix/";
             [sharingItems addObject:shareText];
             [sharingItems addObject:image];
             UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
@@ -172,8 +178,6 @@
             
         }
     }];
-    
-    
 }
 
 - (void)photoEditorCanceled:(AFPhotoEditorController *)editor
@@ -183,14 +187,18 @@
 
 # pragma mark - Actions
 -(void)refresh {
-    
+    // check for internet connection
     if([self connected]){
+        
+        // check if there's some loading in process, finish
         if (self.loading) {
             return;
         }
         
+        // set loading status
         self.loading = YES;
         
+        // download images data from Instagram API
         NSURLSession *session = [NSURLSession sharedSession];
         NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/tags/selfie/media/recent?access_token=%@",self.accessToken ];
         NSURL *url = [[NSURL alloc] initWithString:urlString];
@@ -198,19 +206,22 @@
         NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
             NSData *data = [[NSData alloc] initWithContentsOfURL:location];
             if(data.length > 0) {
+                // set photos on internal dictionary
                 NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
                 self.photos = [responseDictionary valueForKeyPath:@"data"];
                 
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
                     [self.refreshControl endRefreshing];
                     self.loading = NO;
+                    
+                    // no photos, show alert to user
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong and we can't get pictures from Instagram..." delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
                     [alert show];
                 });
             }
             
+            // finish by async reloading the collection view
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.collectionView reloadData];
                 [self.refreshControl endRefreshing];
@@ -218,17 +229,17 @@
             });
         }];
         
+        // always for for NSURL tasks
         [task resume];
-    }
-    // no internet!
-    else {
+    } else {
+        // no internet connection, display alert
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Internet!" message:@"Please check your Internet connection! You need an Internet connection to use Selfix!" delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
         [alert show];
     }
 }
 
 /*
- *  Shows system Camera
+ *  Shows system Camera.
  */
 -(void)showCamera {
     
@@ -241,7 +252,7 @@
 }
 
 /*
- *  User sign out (remove from keychain)
+ *  User sign out (remove from keychain).
  */
 -(void)signOut {
     [SSKeychain deletePasswordForService:@"instagram" account:@"selfix"];
@@ -257,6 +268,9 @@
     });
 }
 
+/**
+ *  User sign in.
+ */
 -(void)signIn {
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
@@ -280,11 +294,17 @@
     }
 }
 
+/**
+ *  Change leftBartButtonItem to sign in on sign out.
+ **/
 -(void)showSignInButton {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"signin"] style:UIBarButtonItemStylePlain target:self action:@selector(signIn)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
+/**
+ *  Change leftBartButtonItem to sign out on sign in.
+ **/
 -(void)showSignOutButton {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"signout"] style:UIBarButtonItemStylePlain target:self action:@selector(signOut)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];

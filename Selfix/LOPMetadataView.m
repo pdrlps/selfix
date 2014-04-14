@@ -61,6 +61,9 @@
 
 #pragma mark - Actions
 
+/**
+ *  Open user profile on Instagram (if installed) or online.
+ **/
 - (void)openUser:(id)sender {
     NSURL *instagramUrl = [[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"instagram://user?username=%@",[self.photo valueForKeyPath:@"user.username"]]];
     if ([[UIApplication sharedApplication] canOpenURL:instagramUrl]) {
@@ -70,7 +73,9 @@
     }
 }
 
-
+/**
+ *  Open photo on Instagram (if installed) or online.
+ **/
 - (void)openPhoto:(id)sender {
     NSURL *instagramUrl = [[NSURL alloc] initWithString:[[NSString alloc] initWithFormat:@"instagram://media?id=%@",[self.photo valueForKeyPath:@"id"]]];
     if ([[UIApplication sharedApplication] canOpenURL:instagramUrl]) {
@@ -80,9 +85,12 @@
     }
 }
 
+/**
+ *  Share Instagram image link.
+ **/
 -(void)share:(id)sender {
     NSMutableArray *sharingItems = [NSMutableArray new];
-    NSString *shareText = [[NSString alloc] initWithFormat:@"%@ #selfix #selfie",self.photo[@"link"] ];
+    NSString *shareText = [[NSString alloc] initWithFormat:@"%@ via #selfix #selfie http://pedrolopes.net/selfix/", self.photo[@"link"] ];
     [sharingItems addObject:shareText];
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
     [self.controller presentViewController:activityController animated:YES completion:nil];
@@ -90,12 +98,12 @@
 
 
 /**
- * Like tapped photo on Instagram
+ * Like tapped photo on Instagram.
  */
 -(void)like:(id)sender {
     NSLog(@"Link: %@", self.photo[@"link"]);
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"user"]];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"selfix"]];
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
@@ -110,6 +118,9 @@
     [task resume];
 }
 
+/**
+ * Display popup alert when like completes on server.
+ */
 -(void)showLikeCompletion {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Liked!" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
     [alert show];

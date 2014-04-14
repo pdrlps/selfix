@@ -50,10 +50,9 @@
 # pragma mark - Actions
 
 /**
- * Like tapped photo on Instagram
+ * Like tapped photo on Instagram.
  */
 -(void)like {
-    NSLog(@"Link: %@", self.photo[@"link"]);
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"selfix"]];
     NSURL *url = [[NSURL alloc] initWithString:urlString];
@@ -70,6 +69,9 @@
     [task resume];    
 }
 
+/**
+ * Display popup alert when like completes on server.
+ */
 -(void)showLikeCompletion {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Liked!" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
     [alert show];

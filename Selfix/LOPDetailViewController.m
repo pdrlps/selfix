@@ -43,7 +43,6 @@
     // dismiss gestures (tap + swipes)
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
     [self.view addGestureRecognizer:tap];
-    
     UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(close)];
     swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
     [self.view addGestureRecognizer:swipeDown];
@@ -65,11 +64,12 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    // add snap to center behaviour
     CGPoint center = self.view.center;
-    
     UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:self.imageView snapToPoint:center];
     [self.animator addBehavior:snap];
     
+    // add metadataview
     self.metadataView.center = center;
     [UIView animateWithDuration:0.5 delay:0.64 usingSpringWithDamping:0.8 initialSpringVelocity:1.0 options:kNilOptions animations:^{
         self.metadataView.alpha = 1.0;
@@ -78,6 +78,9 @@
 
 # pragma mark - Action
 
+/**
+ *  Dismiss metadata view.
+ **/
 -(void)close {
     [self.animator removeAllBehaviors];
     
