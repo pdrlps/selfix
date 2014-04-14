@@ -52,7 +52,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera"] style:UIBarButtonItemStylePlain target:self action:@selector(showCamera)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
-    // register did become active
+    // register DidBecomeActive (reload content)
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     // left navigation signs out / changes user
