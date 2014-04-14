@@ -25,8 +25,6 @@
 - (void)setPhoto:(NSDictionary *)photo {
 	_photo = photo;
     
-    // TODO: Set the avatar, username, share, number of likes, and number of comments
-    
     // likes
     NSString *likes = [[NSString alloc] initWithFormat:@"%@",[self.photo valueForKeyPath:@"likes.count"]];
     [self.likesButton setTitle:likes forState:UIControlStateNormal];

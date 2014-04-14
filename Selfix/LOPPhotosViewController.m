@@ -37,6 +37,7 @@
 {
     [super viewDidLoad];
     self.title = @"Selfix";
+    [AFOpenGLManager beginOpenGLLoad];
     NSShadow* shadow = [NSShadow new];
     shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
     shadow.shadowColor = [UIColor clearColor];
@@ -62,12 +63,12 @@
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
     
-    self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"user"];
+    self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"selfix"];
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
             self.accessToken = responseObject[@"credentials"][@"token"];
-            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"user"];
-            [self showSignOutButton];
+            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
+              [self showSignOutButton];
             [self refresh];
         }];
         
@@ -125,13 +126,51 @@
     [sharingItems addObject:shareImage];
     
     [picker dismissViewControllerAnimated:YES completion:^{
-        UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
-        [self presentViewController:activityController animated:YES completion:nil];
+        // kAviaryAPIKey and kAviarySecret are developer defined
+        // and contain your API key and secret respectively
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [AFPhotoEditorController setAPIKey:@"a7a5b445faad3229" secret:@"643b367ec662ff1a"];
+        });
+        
+        AFPhotoEditorController *editorController = [[AFPhotoEditorController alloc] initWithImage:shareImage];
+        [editorController setDelegate:self];
+        [self presentViewController:editorController animated:YES completion:nil];
     }];
+}
+
+# pragma mark - AFPhotoEditorControllerDelegate
+- (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image
+{
+    [editor dismissViewControllerAnimated:YES completion:^{
+        if ([MGInstagram isAppInstalled])
+        {
+            [MGInstagram postImage:image inView:self.view];
+        }
+        else
+        {
+            NSMutableArray *sharingItems = [NSMutableArray new];
+            NSString *shareText = @"#selfix #selfie http://pedrolopes.net/selfix";
+            [sharingItems addObject:shareText];
+            [sharingItems addObject:image];
+            UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
+            [self presentViewController:activityController animated:YES completion:nil];
+            
+        }
+    }];
+    
+    
+}
+
+- (void)photoEditorCanceled:(AFPhotoEditorController *)editor
+{
+    [editor dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark - Actions
 -(void)refresh {
+
+    
     if([self connected]){
         if (self.loading) {
             return;
@@ -157,9 +196,7 @@
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong and we can't get pictures from Instagram..." delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
                     [alert show];
                 });
-                
             }
-
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.collectionView reloadData];
@@ -178,27 +215,23 @@
 }
 
 /*
- *  Redirects to Instagram or shows system Camera
+ *  Shows system Camera
  */
 -(void)showCamera {
-    NSURL *instagramURL = [NSURL URLWithString:@"instagram://camera"];
-    if ([[UIApplication sharedApplication] canOpenURL:instagramURL]) {
-        [[UIApplication sharedApplication] openURL:instagramURL];
-    } else {
-        UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        
-        [self presentViewController:picker animated:YES completion:nil];
-    }
+    
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 /*
  *  User sign out (remove from keychain)
  */
 -(void)signOut {
-    [SSKeychain deletePasswordForService:@"instagram" account:@"user"];
+    [SSKeychain deletePasswordForService:@"instagram" account:@"selfix"];
     self.accessToken = nil;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Signed out!" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
     [alert show];
@@ -215,7 +248,7 @@
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
             self.accessToken = responseObject[@"credentials"][@"token"];
-            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"user"];
+            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
             [self showSignOutButton];
             [self refresh];
         }];
@@ -223,7 +256,7 @@
     } else {
         [self refresh];
     }
-
+    
 }
 
 -(void)showSignInButton {

@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-MGInstagram.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-ReactiveCocoa.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>016F38A6C3A64DC180FAF26E</key>
+		<key>2C93AE66CF474F4D8972DF7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5EBA2932EFBF45DC8FF95630</key>
+		<key>2EA0E1A67647435391F158F2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>88FF5AA4F6F74C5DAAD4DF14</key>
+		<key>3A2E37B5A03D4AD89C5AC188</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C1DD009BAB2349EBA4C192C5</key>
+		<key>4930FC02CC154B3F8B020EC2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CAC15B2E1DFE42DF8D570918</key>
+		<key>5CD7653A044F45E79C4E813F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D3C4B113A06746778E3846EC</key>
+		<key>9ABF8084F64F4EE5AEF4DB47</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E1B79304D2F1446E8956EDF8</key>
+		<key>D132AC6F111E48C3AD169F67</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F0C0E09650A849BBAFFD125E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

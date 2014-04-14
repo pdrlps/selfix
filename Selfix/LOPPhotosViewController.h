@@ -14,8 +14,10 @@
 #import <SimpleAuth/SimpleAuth.h>
 #import <SSKeychain/SSKeychain.h>
 #import <SSKeychain/SSKeychainQuery.h>
+#import <AviarySDK/AviarySDK.h>
+#import "MGInstagram.h"
 
-@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface LOPPhotosViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AFPhotoEditorControllerDelegate>
 
 @property (nonatomic) NSString *accessToken;
 @property (nonatomic) NSMutableArray *photos;

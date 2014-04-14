@@ -55,7 +55,7 @@
 -(void)like {
     NSLog(@"Link: %@", self.photo[@"link"]);
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"user"]];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"https://api.instagram.com/v1/media/%@/likes?access_token=%@", self.photo[@"id"], [SSKeychain passwordForService:@"instagram" account:@"selfix"]];
     NSURL *url = [[NSURL alloc] initWithString:urlString];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
