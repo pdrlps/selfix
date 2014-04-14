@@ -52,6 +52,9 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera"] style:UIBarButtonItemStylePlain target:self action:@selector(showCamera)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
     
+    // register did become active
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(refresh) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     // left navigation signs out / changes user
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[LOPPhotoCell class] forCellWithReuseIdentifier:@"photo"];
@@ -63,13 +66,24 @@
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
     
+    // load authentication
     self.accessToken = [SSKeychain passwordForService:@"instagram" account:@"selfix"];
+    
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
-            self.accessToken = responseObject[@"credentials"][@"token"];
-            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
-              [self showSignOutButton];
-            [self refresh];
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong with your credentials! Please try again!" delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
+                    [alert show];
+                });
+                [self showSignInButton];
+                return;
+            } else {
+                self.accessToken = responseObject[@"credentials"][@"token"];
+                [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
+                [self showSignOutButton];
+                [self refresh];
+            }
         }];
         
     } else {
@@ -169,7 +183,6 @@
 
 # pragma mark - Actions
 -(void)refresh {
-
     
     if([self connected]){
         if (self.loading) {
@@ -247,16 +260,24 @@
 -(void)signIn {
     if(self.accessToken == nil ) {
         [SimpleAuth authorize:@"instagram" options:@{@"scope":@[@"likes"]} completion:^(NSDictionary *responseObject, NSError *error) {
-            self.accessToken = responseObject[@"credentials"][@"token"];
-            [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
-            [self showSignOutButton];
-            [self refresh];
+            if (error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong with your credentials! Please try again!" delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
+                    [alert show];
+                });
+                [self showSignInButton];
+                return;
+            } else {
+                self.accessToken = responseObject[@"credentials"][@"token"];
+                [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
+                [self showSignOutButton];
+                [self refresh];
+            }
         }];
         
     } else {
         [self refresh];
     }
-    
 }
 
 -(void)showSignInButton {

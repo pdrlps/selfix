@@ -33,7 +33,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+   
     if (!_hasInitialLoad) {
         _hasInitialLoad = YES;
         NSURLRequest *request = [self initialRequest];
@@ -94,6 +94,7 @@
         _webView = [UIWebView new];
         _webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
         _webView.delegate = self;
+
     }
     return _webView;
 }
