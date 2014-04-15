@@ -38,9 +38,6 @@
     [super viewDidLoad];
     self.title = @"Selfix";
     
-    // start OpenGL
-    [AFOpenGLManager beginOpenGLLoad];
-    
     // set refresh on pull down handling
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.tintColor = [UIColor colorWithRed:0.49 green:0.78 blue:0.69 alpha:1];
@@ -86,13 +83,21 @@
                 return;
             } else {
                 // all ok, store token and load Instagram content
-                self.accessToken = responseObject[@"credentials"][@"token"];
-                [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
-                [self showSignOutButton];
-                [self refresh];
+                if(responseObject[@"credentials"][@"token"]) {
+                    self.accessToken = responseObject[@"credentials"][@"token"];
+                    [SSKeychain setPassword:self.accessToken forService:@"instagram" account:@"selfix"];
+                    [self showSignOutButton];
+                    [self refresh];
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh ho!" message:@"Sorry! Something's wrong with your credentials! Please try again!" delegate:nil cancelButtonTitle:@"Try again!" otherButtonTitles:nil];
+                        [alert show];
+                    });
+                    [self showSignInButton];
+                    return;
+                }
             }
         }];
-        
     } else {
         // account already available, load Instagram content
         [self showSignOutButton];
@@ -142,28 +147,10 @@
 # pragma mark - UIImagePickerController
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     // load image from picker
-    UIImage *shareImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     
     // dismiss picker
     [picker dismissViewControllerAnimated:YES completion:^{
-        // configure Aviary photo editor
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [AFPhotoEditorController setAPIKey:@"a7a5b445faad3229" secret:@"643b367ec662ff1a"];
-        });
-        
-        // launch Aviary photo editor
-        AFPhotoEditorController *editorController = [[AFPhotoEditorController alloc] initWithImage:shareImage];
-        [editorController setDelegate:self];
-        [self presentViewController:editorController animated:YES completion:nil];
-    }];
-}
-
-# pragma mark - AFPhotoEditorControllerDelegate
-- (void)photoEditor:(AFPhotoEditorController *)editor finishedWithImage:(UIImage *)image
-{
-    // finished editing, dismiss and share to Instagram or default
-    [editor dismissViewControllerAnimated:YES completion:^{
         if ([MGInstagram isAppInstalled]) {
             [MGInstagram postImage:image inView:self.view];
         }
@@ -178,11 +165,6 @@
             
         }
     }];
-}
-
-- (void)photoEditorCanceled:(AFPhotoEditorController *)editor
-{
-    [editor dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark - Actions

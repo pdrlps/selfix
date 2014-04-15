@@ -14,14 +14,14 @@
 @implementation LOPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
+    // instagram OAuth2
     SimpleAuth.configuration[@"instagram"] = @{
-                                               @"client_id" : @"703e58325e474f099e72dbc5969fdeee",
+                                               @"client_id" : @"ea83702d7ef54da0b1f58eb3121b0178",
                                                SimpleAuthRedirectURIKey : @"selfix://auth/instagram"
                                                };
-    
+    // Crashlytics startup
     [Crashlytics startWithAPIKey:@"23fc3a72601974bf2932492e8609d82c6ca052fc"];
-    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
